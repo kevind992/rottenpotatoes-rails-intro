@@ -11,7 +11,7 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings = Movie.ratings
+    @all_ratings = Movie.pluck(:rating).uniq
     @sort = params[:sort] || session[:sort]
     
     #params[:ratings].nil? ? @t_param = @all_ratings : @t_param = params[:ratings].keys
