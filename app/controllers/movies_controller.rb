@@ -11,16 +11,13 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings = Movie.pluck(:rating).uniq
-  
+    @all_ratings = Movie.ratings
+     
+    @sort = params[:sort] || session[:sort]
     
-    @sort = params[:sort] 
-    if @sort == 'release_date'
-      @movies = Movie.order("release_date ASC")
-    elsif @sort == 'title'
-      @movies = Movie.order("title ASC")
-    else
-      @movies = Movie.all
+    if(params[:sort].nil? and !(session[:sort].nil?)) or (params[:ratings].nil? and !(session[:rating].nil?))
+     flash.keep
+     redirect_to movies_path(sort: session[:sort], ratings: session[:ratings])
     end
     
     params[:ratings].nil? ? @t_param = @all_ratings : @t_param = params[:ratings].keys
